@@ -1,0 +1,56 @@
+.date-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.date-btn {
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+.date-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  flex: 1;
+  text-align: center;
+}
+
+.date-refresh {
+  padding: 8px 12px;
+  font-size: 16px;
+}
+
+.game-section {
+  margin-bottom: 32px;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Syne', sans-serif;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.game-section > * + * {
+  margin-top: 10px;
+}
+
+.center-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 64px 0;
+  color: var(--muted);
+  font-size: 15px;
+}
