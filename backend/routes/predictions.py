@@ -3,11 +3,14 @@ from pydantic import BaseModel
 from typing import Optional
 import anthropic
 import os
+from sqlalchemy.orm import Session
 from .. import models, auth
+from ..database import get_db
 
 router = APIRouter(prefix="/predictions", tags=["predictions"])
 
 class PredictionRequest(BaseModel):
+    game_id: Optional[str] = None
     home_team: str
     away_team: str
     home_record: Optional[str] = None
@@ -27,7 +30,16 @@ class PredictionRequest(BaseModel):
 def analyze_game(
     req: PredictionRequest,
     _: models.User = Depends(auth.get_current_user),
+    db: Session = Depends(get_db),
 ):
+    # Buscar en cache
+    if req.game_id:
+        cached = db.query(models.GameAnalysis).filter(
+            models.GameAnalysis.game_id == req.game_id
+        ).first()
+        if cached:
+            return {"analysis": cached.analysis, "cached": True}
+
     api_key = os.getenv("ANTHROPIC_API_KEY")
     if not api_key:
         raise HTTPException(status_code=500, detail="ANTHROPIC_API_KEY no configurada")
@@ -35,7 +47,7 @@ def analyze_game(
 
     is_playoff = req.season_type == 3
     context_type = "PLAYOFFS NBA" if is_playoff else "temporada regular NBA"
-    
+
     score_line = f"Score: {req.away_team} {req.away_score} – {req.home_team} {req.home_score}" if req.home_score else ""
     spread_line = f"Spread: {req.spread}" if req.spread else ""
     ou_line = f"Over/Under: {req.over_under}" if req.over_under else ""
@@ -79,4 +91,11 @@ Máximo 150 palabras. En español. Sin rodeos ni frases de relleno."""
         max_tokens=600,
         messages=[{"role": "user", "content": prompt}],
     )
-    return {"analysis": message.content[0].text}
+    analysis_text = message.content[0].text
+
+    # Guardar en cache
+    if req.game_id:
+        db.add(models.GameAnalysis(game_id=req.game_id, analysis=analysis_text))
+        db.commit()
+
+    return {"analysis": analysis_text, "cached": False}
