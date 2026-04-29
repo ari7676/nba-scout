@@ -27,7 +27,7 @@ app = FastAPI(
 )
 
 # CORS — en producción reemplazar "*" por tu dominio de frontend
-origins = os.getenv("ALLOWED_ORIGINS", "*").split(",")
+origins = ["https://nba-scout-frontend.onrender.com"]
 
 app.add_middleware(
     CORSMiddleware,
