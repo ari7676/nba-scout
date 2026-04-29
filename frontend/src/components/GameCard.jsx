@@ -27,6 +27,9 @@ export default function GameCard({ game, onAddBet }) {
     setLoading(true)
     try {
       const res = await api.post('/predictions/analyze', {
+  game_id: game.id,   // ← agregar esta línea
+  home_team: home.team.displayName,
+  ...
         home_team: home.team.displayName,
         away_team: away.team.displayName,
         home_record: home.records?.[0]?.summary,
