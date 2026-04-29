@@ -39,3 +39,9 @@ class Bet(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="bets")
+    class GameAnalysis(Base):
+    __tablename__ = "game_analyses"
+    id = Column(Integer, primary_key=True, index=True)
+    game_id = Column(String(100), unique=True, index=True, nullable=False)
+    analysis = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
