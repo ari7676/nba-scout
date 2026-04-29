@@ -11,7 +11,7 @@ engine = create_engine(
     DATABASE_URL.replace("postgresql://", "postgresql+psycopg://"),
     pool_pre_ping=True,
 )
-
+DATABASE_URL.replace("postgresql://", "postgresql+psycopg2://"),
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
