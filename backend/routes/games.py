@@ -71,11 +71,14 @@ async def news(_: models.User = Depends(auth.get_current_user)):
         r.raise_for_status()
         return r.json()
 
+
 @router.get("/playoffs")
 async def playoffs(_: models.User = Depends(auth.get_current_user)):
-    """Bracket de Playoffs NBA."""
-    url = "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/playoffs"
+    url = f"{ESPN_BASE}/scoreboard"
+    params = {"seasontype": "3", "limit": "100"}
     async with httpx.AsyncClient(timeout=10) as client:
-        r = await client.get(url)
+        r = await client.get(url, params=params)
         r.raise_for_status()
         return r.json()
+
+        
