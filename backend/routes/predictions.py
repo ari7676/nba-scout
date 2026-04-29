@@ -55,7 +55,7 @@ def analyze_game(
 
     prompt = f"""Analizá este partido de {context_type} para apostar:
 
-{req.away_team} (visitante) vs {req.home_team} (local)
+Visitante: {req.away_team} | Local: {req.home_team}
 Estado: {req.status or "Programado"}
 {score_line}
 Records temporada regular: {req.away_team} {req.away_record or "N/D"} | {req.home_team} {req.home_record or "N/D"}
