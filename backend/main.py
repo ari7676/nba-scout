@@ -8,10 +8,18 @@ from . import models
 from .routes import auth_router, games, bets, predictions
 import os
 
-# Crear tablas al iniciar (en producción usar Alembic)
-models.Base.metadata.create_all(bind=engine)
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    try:
+        models.Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print(f"DB init error: {e}")
+    yield
 
 app = FastAPI(
+    lifespan=lifespan,
     title="NBA Scout API",
     version="1.0.0",
     docs_url="/docs",
