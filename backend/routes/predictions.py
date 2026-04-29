@@ -36,7 +36,7 @@ def analyze_game(
     is_playoff = req.season_type == 3
     context_type = "PLAYOFFS NBA" if is_playoff else "temporada regular NBA"
     
-    score_line = f"Score actual: {req.away_score} – {req.home_score}" if req.home_score else ""
+    score_line = f"Score: {req.away_team} {req.away_score} – {req.home_team} {req.home_score}" if req.home_score else ""
     spread_line = f"Spread: {req.spread}" if req.spread else ""
     ou_line = f"Over/Under: {req.over_under}" if req.over_under else ""
     series_line = f"Serie actual: {req.series}" if req.series else ""
