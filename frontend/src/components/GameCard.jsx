@@ -10,7 +10,7 @@ export default function GameCard({ game, onAddBet }) {
   const home = comp.competitors.find((c) => c.homeAway === 'home')
   const away = comp.competitors.find((c) => c.homeAway === 'away')
   const odds = comp.odds?.[0]
-  const state = game.status.type.state // 'pre' | 'in' | 'post'
+  const state = game.status.type.state
   const isLive = state === 'in'
   const isPost = state === 'post'
   const isPre = state === 'pre'
@@ -38,6 +38,9 @@ export default function GameCard({ game, onAddBet }) {
         over_under: odds?.overUnder,
         home_ml: odds?.homeTeamOdds?.moneyLine,
         away_ml: odds?.awayTeamOdds?.moneyLine,
+        series: comp.series?.summary || null,
+        season_type: game.season?.type || null,
+        notes: game.notes?.[0]?.headline || null,
       })
       setAnalysis(res.data.analysis)
     } catch {
@@ -53,7 +56,6 @@ export default function GameCard({ game, onAddBet }) {
 
   return (
     <div className={`game-card ${isLive ? 'game-card--live' : ''}`}>
-      {/* Header */}
       <div className="gc-header">
         <span className="gc-status">
           {isLive && <span className="live-dot" />}
@@ -62,7 +64,6 @@ export default function GameCard({ game, onAddBet }) {
         {isPre && <span className="gc-time">{gameTime}</span>}
       </div>
 
-      {/* Teams */}
       <div className="gc-teams">
         <div className="gc-team">
           <img
@@ -97,7 +98,6 @@ export default function GameCard({ game, onAddBet }) {
         </div>
       </div>
 
-      {/* Odds */}
       {odds && (
         <div className="gc-odds">
           {odds.details && <span className="gc-pill">Spread: {odds.details}</span>}
@@ -115,7 +115,6 @@ export default function GameCard({ game, onAddBet }) {
         </div>
       )}
 
-      {/* Actions */}
       <div className="gc-actions">
         <button className="btn btn-ghost gc-btn" onClick={analyze} disabled={loading}>
           {loading ? <><span className="spinner" /> Analizando...</> : analysis ? '↻ Reanálizar con IA' : '✦ Analizar con IA'}
@@ -135,7 +134,6 @@ export default function GameCard({ game, onAddBet }) {
         )}
       </div>
 
-      {/* AI Analysis */}
       {analysis && (
         <div className="gc-analysis">
           <div className="gc-analysis-label">Análisis IA</div>
