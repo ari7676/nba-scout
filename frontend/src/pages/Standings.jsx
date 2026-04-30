@@ -40,17 +40,22 @@ export default function Standings() {
         const seriesMap = {}
         for (const ev of events) {
   const comp = ev.competitions?.[0]
-  const key = ev.shortName // "ORL @ DET", "CLE @ MIA", etc
+  const key = ev.shortName
   if (!seriesMap[key]) {
     const home = comp.competitors.find(c => c.homeAway === 'home')
     const away = comp.competitors.find(c => c.homeAway === 'away')
-    const seriesCompetitors = comp.series?.competitors || []
-    const homeWins = seriesCompetitors.find(c => c.homeAway === 'home')?.wins || 0
-    const awayWins = seriesCompetitors.find(c => c.homeAway === 'away')?.wins || 0
+    const summary = comp.series?.summary || ''
+    const match = summary.match(/(\d+)-(\d+)/)
+    const wins = match ? [parseInt(match[1]), parseInt(match[2])] : [0, 0]
+    // el primero en summary es el líder, determinar cuál es home/away
+    const leaderAbbr = summary.split(' ')[0]
+    const homeLeads = home?.team?.abbreviation === leaderAbbr
     seriesMap[key] = {
       home: home?.team?.abbreviation,
       away: away?.team?.abbreviation,
-      homeWins, awayWins,
+      homeWins: homeLeads ? wins[0] : wins[1],
+      awayWins: homeLeads ? wins[1] : wins[0],
+      status: summary,
     }
   }
 }
