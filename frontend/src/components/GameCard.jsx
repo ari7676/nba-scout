@@ -24,33 +24,31 @@ export default function GameCard({ game, onAddBet }) {
     : null
 
   async function analyze() {
-    setLoading(true)
-    try {
-      const res = await api.post('/predictions/analyze', {
-  game_id: game.id,   // ← agregar esta línea
-  home_team: home.team.displayName,
-  ...
-        home_team: home.team.displayName,
-        away_team: away.team.displayName,
-        home_record: home.records?.[0]?.summary,
-        away_record: away.records?.[0]?.summary,
-        status: game.status.type.description,
-        home_score: home.score,
-        away_score: away.score,
-        spread: odds?.details,
-        over_under: odds?.overUnder,
-        home_ml: odds?.homeTeamOdds?.moneyLine,
-        away_ml: odds?.awayTeamOdds?.moneyLine,
-        series: comp.series?.summary || null,
-        season_type: game.season?.type || null,
-        notes: game.notes?.[0]?.headline || null,
-      })
-      setAnalysis(res.data.analysis)
-    } catch {
-      setAnalysis('Error al obtener análisis.')
-    }
-    setLoading(false)
+  setLoading(true)
+  try {
+    const res = await api.post('/predictions/analyze', {
+      game_id: game.id,
+      home_team: home.team.displayName,
+      away_team: away.team.displayName,
+      home_record: home.records?.[0]?.summary,
+      away_record: away.records?.[0]?.summary,
+      status: game.status.type.description,
+      home_score: home.score,
+      away_score: away.score,
+      spread: odds?.details,
+      over_under: odds?.overUnder,
+      home_ml: odds?.homeTeamOdds?.moneyLine,
+      away_ml: odds?.awayTeamOdds?.moneyLine,
+      series: comp.series?.summary || null,
+      season_type: game.season?.type || null,
+      notes: game.notes?.[0]?.headline || null,
+    })
+    setAnalysis(res.data.analysis)
+  } catch {
+    setAnalysis('Error al obtener análisis.')
   }
+  setLoading(false)
+}
 
   function fmtML(ml) {
     if (!ml) return null
