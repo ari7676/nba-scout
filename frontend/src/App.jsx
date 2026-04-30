@@ -51,3 +51,8 @@ export default function App() {
     </BrowserRouter>
   )
 }
+// arriba con los imports:
+import Playoffs from './pages/Playoffs'
+
+// dentro de <Routes>:
+<Route path="/playoffs" element={<PrivateLayout><Playoffs /></PrivateLayout>} />
