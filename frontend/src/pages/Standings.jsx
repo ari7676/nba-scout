@@ -14,7 +14,7 @@ const STATIC_BRACKET = {
   east: [
     { s1: 'DET', seed1: 1, wins1: 0, s2: 'ORL', seed2: 8, wins2: 0, status: 'Por comenzar' },
     { s1: 'CLE', seed1: 4, wins1: 0, s2: 'TOR', seed2: 5, wins2: 0, status: 'Por comenzar' },
-    { s1: 'NYK', seed1: 3, wins1: 0, s2: 'ATL', seed2: 6, wins2: 0, status: 'Por comenzar' },
+    { s1: 'NY', seed1: 3, wins1: 0, s2: 'ATL', seed2: 6, wins2: 0, status: 'Por comenzar' },
     { s1: 'BOS', seed1: 2, wins1: 0, s2: 'PHI', seed2: 7, wins2: 0, status: 'Por comenzar' },
   ],
   west: [
@@ -63,7 +63,8 @@ console.log('STATIC KEYS:', [
         // Actualizar static bracket con datos reales
         const merge = (matchups) => matchups.map(m => {
           const key = `${m.s2} @ ${m.s1}`
-          const upd = updates[key]
+          const keyRev = `${m.s1} @ ${m.s2}`
+          const upd = updates[key] || updates[keyRev]
           if (!upd) return m
           const w1 = upd.homeWins, w2 = upd.awayWins
           const leader = w1 > w2 ? m.s1 : w2 > w1 ? m.s2 : null
