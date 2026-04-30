@@ -12,17 +12,18 @@ ODDS_API_KEY = os.getenv("ODDS_API_KEY", "")  # https://the-odds-api.com — fre
 
 @router.get("/scoreboard")
 async def scoreboard(
-    date: Optional[str] = Query(default=None, description="Formato YYYYMMDD"),
+    date: Optional[str] = Query(default=None),
+    seasontype: Optional[str] = Query(default=None),
     _: models.User = Depends(auth.get_current_user),
 ):
-    """Partidos del día desde ESPN (scores, odds, records)."""
     url = f"{ESPN_BASE}/scoreboard"
-    params = {"dates": date} if date else {}
+    params = {}
+    if date: params["dates"] = date
+    if seasontype: params["seasontype"] = seasontype
     async with httpx.AsyncClient(timeout=10) as client:
         r = await client.get(url, params=params)
         r.raise_for_status()
         return r.json()
-
 
 @router.get("/standings")
 async def standings(_: models.User = Depends(auth.get_current_user)):
