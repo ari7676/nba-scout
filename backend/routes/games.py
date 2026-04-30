@@ -79,7 +79,7 @@ async def playoffs(_: models.User = Depends(auth.get_current_user)):
     all_events = []
     seen = set()
     async with httpx.AsyncClient(timeout=10) as client:
-        for i in range(7):
+        for i in range(14):
             d = (datetime.utcnow() - timedelta(days=i)).strftime("%Y%m%d")
             r = await client.get(f"{ESPN_BASE}/scoreboard", params={"seasontype": "3", "dates": d, "limit": "50"})
             if r.status_code == 200:
