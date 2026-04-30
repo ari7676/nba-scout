@@ -37,7 +37,7 @@ export default function Dashboard() {
     setError('')
     try {
       const date = toESPN(offsetDate(dateOffset))
-      const res = await api.get(`/games/scoreboard?date=${date}`)
+      const res = await api.get(`/games/scoreboard?date=${date}&seasontype=3`)
       setGames(res.data.events || [])
     } catch {
       setError('Error al cargar partidos.')
