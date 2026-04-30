@@ -12,16 +12,16 @@ const ROUND_NAMES = {
 // Datos reales NBA Playoffs 2025-26 (primera ronda en curso)
 const STATIC_BRACKET = {
   east: [
-    { s1: 'DET', seed1: 1, wins1: 0, s2: 'ORL', seed2: 8, wins2: 1, status: 'ORL lidera 1-0' },
-    { s1: 'CLE', seed1: 2, wins1: 2, s2: 'MIA', seed2: 7, wins2: 0, status: 'CLE lidera 2-0' },
+    { s1: 'DET', seed1: 1, wins1: 0, s2: 'ORL', seed2: 8, wins2: 0, status: 'Por comenzar' },
+    { s1: 'CLE', seed1: 4, wins1: 0, s2: 'TOR', seed2: 5, wins2: 0, status: 'Por comenzar' },
     { s1: 'NYK', seed1: 3, wins1: 0, s2: 'ATL', seed2: 6, wins2: 0, status: 'Por comenzar' },
-    { s1: 'IND', seed1: 4, wins1: 0, s2: 'TOR', seed2: 5, wins2: 0, status: 'Por comenzar' },
+    { s1: 'BOS', seed1: 2, wins1: 0, s2: 'PHI', seed2: 7, wins2: 0, status: 'Por comenzar' },
   ],
   west: [
-    { s1: 'OKC', seed1: 1, wins1: 1, s2: 'PHX', seed2: 8, wins2: 0, status: 'OKC lidera 1-0' },
-    { s1: 'SA',  seed1: 2, wins1: 1, s2: 'POR', seed2: 7, wins2: 1, status: 'Serie 1-1' },
-    { s1: 'DEN', seed1: 3, wins1: 1, s2: 'MIN', seed2: 6, wins2: 1, status: 'Serie 1-1' },
-    { s1: 'LAL', seed1: 4, wins1: 2, s2: 'HOU', seed2: 5, wins2: 0, status: 'LAL lidera 2-0' },
+    { s1: 'OKC', seed1: 1, wins1: 0, s2: 'PHX', seed2: 8, wins2: 0, status: 'Por comenzar' },
+    { s1: 'SA',  seed1: 2, wins1: 0, s2: 'POR', seed2: 7, wins2: 0, status: 'Por comenzar' },
+    { s1: 'DEN', seed1: 3, wins1: 0, s2: 'MIN', seed2: 6, wins2: 0, status: 'Por comenzar' },
+    { s1: 'LAL', seed1: 4, wins1: 0, s2: 'HOU', seed2: 5, wins2: 0, status: 'Por comenzar' },
   ],
 }
 
