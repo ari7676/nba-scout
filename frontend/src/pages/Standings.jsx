@@ -36,35 +36,40 @@ export default function Standings() {
       const res = await api.get('/games/playoffs')
       const events = res.data?.events || []
       if (events.length > 0) {
-        // parsear wins de cada serie desde los eventos
-        const seriesMap = {}
+        const updates = {}
         for (const ev of events) {
-  const comp = ev.competitions?.[0]
-  const key = ev.shortName
-  if (!seriesMap[key]) {
-    const home = comp.competitors.find(c => c.homeAway === 'home')
-    const away = comp.competitors.find(c => c.homeAway === 'away')
-    const summary = comp.series?.summary || ''
-    const match = summary.match(/(\d+)-(\d+)/)
-    const wins = match ? [parseInt(match[1]), parseInt(match[2])] : [0, 0]
-    // el primero en summary es el líder, determinar cuál es home/away
-    const leaderAbbr = summary.split(' ')[0]
-    const homeLeads = home?.team?.abbreviation === leaderAbbr
-    seriesMap[key] = {
-      home: home?.team?.abbreviation,
-      away: away?.team?.abbreviation,
-      homeWins: homeLeads ? wins[0] : wins[1],
-      awayWins: homeLeads ? wins[1] : wins[0],
-      status: summary,
-    }
-  }
-}
-console.log('SERIES:', JSON.stringify(seriesMap, null, 2))
+          const comp = ev.competitions?.[0]
+          const key = ev.shortName
+          if (!updates[key]) {
+            const home = comp.competitors.find(c => c.homeAway === 'home')
+            const away = comp.competitors.find(c => c.homeAway === 'away')
+            const summary = comp.series?.summary || ''
+            const match = summary.match(/(\d+)-(\d+)/)
+            const wins = match ? [parseInt(match[1]), parseInt(match[2])] : [0, 0]
+            const leaderAbbr = summary.split(' ')[0]
+            const homeLeads = home?.team?.abbreviation === leaderAbbr
+            updates[`${away?.team?.abbreviation} @ ${home?.team?.abbreviation}`] = {
+              homeWins: homeLeads ? wins[0] : wins[1],
+              awayWins: homeLeads ? wins[1] : wins[0],
+              status: summary,
+            }
+          }
+        }
+        // Actualizar static bracket con datos reales
+        const merge = (matchups) => matchups.map(m => {
+          const key = `${m.s2} @ ${m.s1}`
+          const upd = updates[key]
+          if (!upd) return m
+          const w1 = upd.homeWins, w2 = upd.awayWins
+          const leader = w1 > w2 ? m.s1 : w2 > w1 ? m.s2 : null
+          return { ...m, wins1: w1, wins2: w2,
+            status: leader ? `${leader} lidera ${Math.max(w1,w2)}-${Math.min(w1,w2)}` : `Serie ${w1}-${w2}` }
+        })
+        STATIC_BRACKET.east = merge(STATIC_BRACKET.east)
+        STATIC_BRACKET.west = merge(STATIC_BRACKET.west)
       }
-      setUseStatic(true) // por ahora mantener static hasta ver el log
-    } catch {
-      setUseStatic(true)
-    }
+    } catch {}
+    setUseStatic(true)
     setLoading(false)
   }
   load()
