@@ -39,22 +39,22 @@ export default function Standings() {
         // parsear wins de cada serie desde los eventos
         const seriesMap = {}
         for (const ev of events) {
-          const comp = ev.competitions?.[0]
-          const seriesKey = comp?.series?.title || ev.shortName
-          if (!seriesMap[seriesKey]) {
-            const home = comp.competitors.find(c => c.homeAway === 'home')
-            const away = comp.competitors.find(c => c.homeAway === 'away')
-            seriesMap[seriesKey] = {
-              home: home?.team?.abbreviation,
-              away: away?.team?.abbreviation,
-              homeSeed: home?.curatedRank?.current,
-              awaySeed: away?.curatedRank?.current,
-              homeWins: comp.series?.competitors?.find(c => c.homeAway === 'home')?.wins || 0,
-              awayWins: comp.series?.competitors?.find(c => c.homeAway === 'away')?.wins || 0,
-            }
-          }
-        }
-        console.log('SERIES:', seriesMap) // para verificar
+  const comp = ev.competitions?.[0]
+  const key = ev.shortName // "ORL @ DET", "CLE @ MIA", etc
+  if (!seriesMap[key]) {
+    const home = comp.competitors.find(c => c.homeAway === 'home')
+    const away = comp.competitors.find(c => c.homeAway === 'away')
+    const seriesCompetitors = comp.series?.competitors || []
+    const homeWins = seriesCompetitors.find(c => c.homeAway === 'home')?.wins || 0
+    const awayWins = seriesCompetitors.find(c => c.homeAway === 'away')?.wins || 0
+    seriesMap[key] = {
+      home: home?.team?.abbreviation,
+      away: away?.team?.abbreviation,
+      homeWins, awayWins,
+    }
+  }
+}
+console.log('SERIES:', JSON.stringify(seriesMap, null, 2))
       }
       setUseStatic(true) // por ahora mantener static hasta ver el log
     } catch {
