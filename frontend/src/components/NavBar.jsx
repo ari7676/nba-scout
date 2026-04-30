@@ -13,11 +13,12 @@ export default function NavBar() {
   }
 
   const links = [
-    { to: '/', label: 'Partidos' },
-    { to: '/bets', label: 'Apuestas' },
-    { to: '/standings', label: 'Tabla' },
-  ]
-
+  { to: '/', label: 'Partidos' },
+  { to: '/bets', label: 'Apuestas' },
+  { to: '/standings', label: 'Tabla' },
+  { to: '/playoffs', label: '🏆 Playoffs' },
+]
+  
   return (
     <nav className="navbar">
       <div className="navbar-inner">
