@@ -31,23 +31,39 @@ export default function Standings() {
   const [useStatic, setUseStatic] = useState(false)
 
   useEffect(() => {
-    async function load() {
-      try {
-        // Intentar con season 2026
-        const res = await api.get('/games/playoffs')
-        const allSeries = res.data?.series || []
-        if (allSeries.length > 0) {
-          setSeries(allSeries)
-        } else {
-          setUseStatic(true)
+  async function load() {
+    try {
+      const res = await api.get('/games/playoffs')
+      const events = res.data?.events || []
+      if (events.length > 0) {
+        // parsear wins de cada serie desde los eventos
+        const seriesMap = {}
+        for (const ev of events) {
+          const comp = ev.competitions?.[0]
+          const seriesKey = comp?.series?.title || ev.shortName
+          if (!seriesMap[seriesKey]) {
+            const home = comp.competitors.find(c => c.homeAway === 'home')
+            const away = comp.competitors.find(c => c.homeAway === 'away')
+            seriesMap[seriesKey] = {
+              home: home?.team?.abbreviation,
+              away: away?.team?.abbreviation,
+              homeSeed: home?.curatedRank?.current,
+              awaySeed: away?.curatedRank?.current,
+              homeWins: comp.series?.competitors?.find(c => c.homeAway === 'home')?.wins || 0,
+              awayWins: comp.series?.competitors?.find(c => c.homeAway === 'away')?.wins || 0,
+            }
+          }
         }
-      } catch {
-        setUseStatic(true)
+        console.log('SERIES:', seriesMap) // para verificar
       }
-      setLoading(false)
+      setUseStatic(true) // por ahora mantener static hasta ver el log
+    } catch {
+      setUseStatic(true)
     }
-    load()
-  }, [])
+    setLoading(false)
+  }
+  load()
+}, [])
 
   if (loading) return (
     <div className="page" style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:12, color:'var(--muted)', minHeight:'60vh' }}>
