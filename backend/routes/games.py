@@ -75,11 +75,17 @@ async def news(_: models.User = Depends(auth.get_current_user)):
 
 @router.get("/playoffs")
 async def playoffs(_: models.User = Depends(auth.get_current_user)):
-    url = f"{ESPN_BASE}/scoreboard"
-    params = {"seasontype": "3", "limit": "100"}
+    from datetime import datetime, timedelta
+    all_events = []
+    seen = set()
     async with httpx.AsyncClient(timeout=10) as client:
-        r = await client.get(url, params=params)
-        r.raise_for_status()
-        return r.json()
-
+        for i in range(7):
+            d = (datetime.utcnow() - timedelta(days=i)).strftime("%Y%m%d")
+            r = await client.get(f"{ESPN_BASE}/scoreboard", params={"seasontype": "3", "dates": d, "limit": "50"})
+            if r.status_code == 200:
+                for ev in r.json().get("events", []):
+                    if ev["shortName"] not in seen:
+                        seen.add(ev["shortName"])
+                        all_events.append(ev)
+    return {"events": all_events}
         
