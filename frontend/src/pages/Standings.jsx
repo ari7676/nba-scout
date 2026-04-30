@@ -55,6 +55,11 @@ export default function Standings() {
             }
           }
         }
+        console.log('UPDATES KEYS:', Object.keys(updates))
+console.log('STATIC KEYS:', [
+  ...STATIC_BRACKET.east.map(m => `${m.s2} @ ${m.s1}`),
+  ...STATIC_BRACKET.west.map(m => `${m.s2} @ ${m.s1}`)
+])
         // Actualizar static bracket con datos reales
         const merge = (matchups) => matchups.map(m => {
           const key = `${m.s2} @ ${m.s1}`
